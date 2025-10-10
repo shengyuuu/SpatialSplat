@@ -1,0 +1,53 @@
+spatialsplat:
+  encoder:
+    name: spatialsplat
+
+    backbone:
+      name: croco
+      model: ViTLarge_BaseDecoder
+      patch_embed_cls: PatchEmbedDust3R
+      asymmetry_decoder: true
+
+      intrinsics_embed_loc: 'encoder'
+      intrinsics_embed_degree: 4
+      intrinsics_embed_type: 'token'
+
+    opacity_mapping:
+      initial: 0.0
+      final: 0.0
+      warm_up: 1
+
+    num_monocular_samples: 32
+    num_surfaces: 1
+    predict_opacity: false
+
+    gaussians_per_pixel: 1
+
+    gaussian_adapter:
+      gaussian_scale_min: 0.5
+      gaussian_scale_max: 15.0
+      sh_degree: 4
+      combine: false
+      instance_dim: 8
+      language_dim: 512
+      language_model_type: 'clip'
+
+    d_feature: 128
+    apply_bounds_shim: true
+    gs_params_head_type: dpt_gs
+    gs_instance_head_type: dpt_instance
+    pose_free: true
+    intrinsics_embed_loc: encoder
+    intrinsics_embed_type: token
+    pretrained_weights: 'pretrained_weights/spatialsplat.ckpt'
+    language_scale: 8
+    freeze_encoder: true
+
+  decoder:
+    name: splatting_cuda
+    background_color: [0.0, 0.0, 0.0]
+    make_scale_invariant: true
+
+  ckpt_path: 'pretrained_weights/spatialsplat.ckpt'
+  near: 0.1
+  far: 2.0
